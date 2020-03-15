@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "546706993917",
+    "firebase_url": "https://messenger-9391d.firebaseio.com",
+    "project_id": "messenger-9391d",
+    "storage_bucket": "messenger-9391d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546706993917:android:f65f112f5d2bc2c8c74494",
+        "android_client_info": {
+          "package_name": "com.jayantx.messenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546706993917-pk3l3ktfpeqqag1j1oukdtjo4qudddps.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jayantx.messenger",
+            "certificate_hash": "9e390b527f322639bd124a45325aedb08d191581"
+          }
+        },
+        {
+          "client_id": "546706993917-49lbv2ekkgg4l1v97cug9g4k5ojj1vvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbCYXTZDrKaM4IoJ3ESthFdR9W70-HqSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546706993917-49lbv2ekkgg4l1v97cug9g4k5ojj1vvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
