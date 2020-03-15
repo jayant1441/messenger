@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.chat_to_me_ticket.view.*
 class ChattingArea : AppCompatActivity() {
 
     val adapter = GroupAdapter<GroupieViewHolder>()
-//    val intent_extra =
+
 
     val our_profile_pic_url = MainActivity.our_profile_pic_url
 

@@ -55,7 +55,6 @@ class SignUpActivity : AppCompatActivity(){
                         progress_dialog.dismiss()
                         val user = auth.currentUser
                         SaveImageToStorage()
-                        UploadToFirebase()
                         val intent = Intent(this,MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
@@ -147,15 +146,23 @@ class SignUpActivity : AppCompatActivity(){
 
 
 
-    var image_download_link : String = ""
+
 
     private fun SaveImageToStorage(){
-        if (SelectedImageUri == null) return
-        val storageRef = storage.reference
-        val imagesRef: StorageReference? = storageRef.child("images")
-        imagesRef?.child(FirebaseAuth.getInstance().currentUser!!.uid)?.putFile(SelectedImageUri!!)
+        val currentUserUUID = FirebaseAuth.getInstance().currentUser!!.uid
 
-        image_download_link = imagesRef?.child("images")?.child(FirebaseAuth.getInstance().currentUser!!.uid)?.downloadUrl.toString()
+        if (SelectedImageUri == null) return
+        val storageRef = storage.getReference("/images/$currentUserUUID")
+        storageRef.putFile(SelectedImageUri!!).addOnSuccessListener {
+           storageRef.downloadUrl.addOnSuccessListener {
+               Log.d("yoyohoney",it.toString())
+               UploadToFirebase(it.toString())
+           }
+        }
+
+
+
+//        image_download_link = imagesRef?.child("images")?.child(FirebaseAuth.getInstance().currentUser!!.uid)?.downloadUrl.toString()
     }
 
 
@@ -166,7 +173,7 @@ class SignUpActivity : AppCompatActivity(){
         constructor(): this("","","","","","")
     }
 
-    private fun UploadToFirebase(){
+    private fun UploadToFirebase( image_download_link: String){
 
         database = FirebaseDatabase.getInstance().reference
         val database_child = database.child("users")
