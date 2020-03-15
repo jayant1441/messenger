@@ -41,8 +41,10 @@ class NewChatActivity : AppCompatActivity() {
         userRef.addValueEventListener(object : ValueEventListener{
 
             override fun onCancelled(p0: DatabaseError) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
             }
+
+
             override fun onDataChange(datasnapshot: DataSnapshot) {
                 for (snapshot in datasnapshot.children){
                     val listOfUsersFromFirebase = snapshot.getValue(NewChatDataClass::class.java)

@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
+import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -59,11 +60,11 @@ class SignUpActivity : AppCompatActivity(){
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
                         this.finish()
-                    } else {
-                        Log.d("taging", "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                        FirebaseAuth.getInstance().signOut()
+                    } else   {
                         progress_dialog.dismiss()
+                        Log.d("taging", "createUserWithEmail:failure"+ task.exception)
+                        Toast.makeText(baseContext, "Authentication failed.${task.exception}", Toast.LENGTH_SHORT).show()
+                        FirebaseAuth.getInstance().signOut()
                     }
 
                 }
@@ -144,30 +145,27 @@ class SignUpActivity : AppCompatActivity(){
     }
 
 
-
-
-
-
     private fun SaveImageToStorage(){
         val currentUserUUID = FirebaseAuth.getInstance().currentUser!!.uid
 
-        if (SelectedImageUri == null) return
-        val storageRef = storage.getReference("/images/$currentUserUUID")
-        storageRef.putFile(SelectedImageUri!!).addOnSuccessListener {
-           storageRef.downloadUrl.addOnSuccessListener {
-               Log.d("yoyohoney",it.toString())
-               UploadToFirebase(it.toString())
-           }
+        if (SelectedImageUri == null) {
+
+            UploadToFirebase("https://firebasestorage.googleapis.com/v0/b/messenger-9391d.appspot.com/o/images%2Fuser%20(3).png?alt=media&token=9227d84b-3a51-4613-8c57-d8d1a255dac5")
+
+        }
+        else if (SelectedImageUri != null) {
+            val storageRef = storage.getReference("/images/$currentUserUUID")
+            storageRef.putFile(SelectedImageUri!!).addOnSuccessListener {
+                storageRef.downloadUrl.addOnSuccessListener {
+                    Log.d("yoyohoney",it.toString())
+
+                    UploadToFirebase(it.toString())
+                }
+            }
         }
 
 
-
-//        image_download_link = imagesRef?.child("images")?.child(FirebaseAuth.getInstance().currentUser!!.uid)?.downloadUrl.toString()
     }
-
-
-
-
 
     class FirebaseDatabaseDataClass(var name : String, var Email: String , var password:String, var uuid : String, var username: String , var profile_pic : String ){
         constructor(): this("","","","","","")
@@ -175,15 +173,12 @@ class SignUpActivity : AppCompatActivity(){
 
     private fun UploadToFirebase( image_download_link: String){
 
+
+
         database = FirebaseDatabase.getInstance().reference
         val database_child = database.child("users")
         val uuid = FirebaseAuth.getInstance().currentUser!!.uid
         val user = FirebaseDatabaseDataClass(et_signup_name.text.toString().toLowerCase(), et_signup_email.text.toString().toLowerCase() , et_signup_password.text.toString(), uuid!!, et_signup_username.text.toString().toLowerCase(), image_download_link )
         database_child.child(uuid).setValue(user)
     }
-
-
-
-
-
 }

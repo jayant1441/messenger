@@ -55,10 +55,11 @@ class ChattingArea : AppCompatActivity() {
         val  latest_opposite_messages_ref=  FirebaseDatabase.getInstance().getReference("/all-latest-messages/$ToId/$FromId")
 
 
-        val message_key = ref.push()
-        val opposite_message_key = opposite_ref.push()
+//        val message_key = ref.push()
+//        val opposite_message_key = opposite_ref.push()
 
-        val MsgId = message_key.toString()
+
+
         val timestamp = System.currentTimeMillis()
 
 
@@ -66,10 +67,15 @@ class ChattingArea : AppCompatActivity() {
 
 
         btn_send_message.setOnClickListener {
+
+            val message_key = ref.push()
+            val opposite_message_key = opposite_ref.push()
+            val MsgId = message_key.toString()
+
+
             if (FromId == null)return@setOnClickListener
             if (et_send_message.text.isEmpty()) return@setOnClickListener
 
-            Log.d("btao", intent.getParcelableExtra<NewChatDataClass>("User_Key").profile_pic)
             message_key.setValue(ActualMsgDataClass(FromId, et_send_message.text.toString(), ToId, MsgId, timestamp)).addOnCompleteListener {
                 et_send_message.setText("")
                 Log.d("btao", "Success")

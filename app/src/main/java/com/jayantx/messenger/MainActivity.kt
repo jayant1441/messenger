@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.jayantx.messenger.NewChatActivityRV.NewChatDataClass
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -20,6 +21,8 @@ import kotlinx.android.synthetic.main.rv_main_activity_ticket.view.*
 class MainActivity : AppCompatActivity() {
 
     companion object{
+        var listItem : NewChatDataClass = NewChatDataClass()
+
         var our_profile_pic_url: String= ""
     }
     val current_user_uid: String = FirebaseAuth.getInstance().currentUser!!.uid
@@ -46,6 +49,12 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        adapter.setOnItemClickListener { item, view ->
+            val intent = Intent(this,ChattingArea::class.java)
+            intent.putExtra("User_Key", listItem)
+            startActivity(intent)
+        }
+
         rv_main_activity.adapter = adapter
         rv_main_activity.layoutManager = LinearLayoutManager(this)
 
@@ -54,7 +63,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun ListenForLatestMessage() {
+
         val ref_to_all_latest_message  = FirebaseDatabase.getInstance().getReference("/all-latest-messages/$current_user_uid")
+
         ref_to_all_latest_message.addChildEventListener(object : ChildEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
@@ -67,6 +78,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+
                 var chatMessage = p0.getValue(ActualMsgDataClass::class.java)?: return
                 adapter.add(LatestMessages_MainActivity(chatMessage))
             }
@@ -77,24 +89,46 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
     class LatestMessages_MainActivity(var chatMessage: ActualMsgDataClass): Item<GroupieViewHolder>(){
+
 
 
         override fun getLayout(): Int = R.layout.rv_main_activity_ticket
 
         override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
-            val ref = FirebaseDatabase.getInstance().getReference("/users/${chatMessage.ToId}")
+
+            var chatPartnerId: String
+            if (chatMessage.FromId == FirebaseAuth.getInstance().currentUser!!.uid){
+                chatPartnerId = chatMessage.ToId
+            }
+            else{
+                chatPartnerId = chatMessage.FromId
+            }
+
+            val ref = FirebaseDatabase.getInstance().getReference("/users/${chatPartnerId}")
             ref.addValueEventListener(object :ValueEventListener{
                 override fun onCancelled(p0: DatabaseError) {
 
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
+
+                    listItem.name = p0.child("name").value.toString()
+                    listItem.email = p0.child("email").value.toString()
+                    listItem.profile_pic = p0.child("profile_pic").value.toString()
+                    listItem.password = p0.child("password").value.toString()
+                    listItem.username = p0.child("username").value.toString()
+                    listItem.uuid = p0.child("uuid").value.toString()
+
+
+
                     viewHolder.itemView.tv_main_activity_username.text = p0.child("username").value.toString()
+                    viewHolder.itemView.tv_main_activity_name.text = p0.child("name").value.toString()
+
                     val userDetail = p0.getValue(SignUpActivity.FirebaseDatabaseDataClass::class.java)
                     Picasso.get().load(userDetail?.profile_pic).into(viewHolder.itemView.civ_main_activity_profile_pic)
+
                 }
 
             })
