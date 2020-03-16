@@ -3,8 +3,10 @@ package com.jayantx.messenger
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -79,8 +81,14 @@ class MainActivity : AppCompatActivity() {
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
 
-                var chatMessage = p0.getValue(ActualMsgDataClass::class.java)?: return
-                adapter.add(LatestMessages_MainActivity(chatMessage))
+                val chatMessage = p0.getValue(ActualMsgDataClass::class.java)
+                if (chatMessage == null){
+                    Log.d("taging", "Null List of message")
+                }
+                else {
+                    adapter.add(LatestMessages_MainActivity(chatMessage))
+                    tv_to_start_a_new_chat.alpha = 0.0f
+                }
             }
 
             override fun onChildRemoved(p0: DataSnapshot) {

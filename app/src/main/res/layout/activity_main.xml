@@ -6,12 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_main_activity"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/tv_to_start_a_new_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:drawableStart="@drawable/ic_person_add_black_24dp"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:text="To Start a conversation\nClick on New Chat Icon"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

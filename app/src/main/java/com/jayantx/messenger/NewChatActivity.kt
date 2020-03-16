@@ -50,6 +50,7 @@ class NewChatActivity : AppCompatActivity() {
                     val listOfUsersFromFirebase = snapshot.getValue(NewChatDataClass::class.java)
                     if (listOfUsersFromFirebase!=null){
                         if(listOfUsersFromFirebase.uuid!= FirebaseAuth.getInstance().currentUser!!.uid){
+                            tv_please_wait.alpha = 0.0f
                             listOfUsers?.add(listOfUsersFromFirebase)
                         }
 
